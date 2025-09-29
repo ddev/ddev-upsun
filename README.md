@@ -10,16 +10,16 @@
 
 [Upsun](https://upsun.com/) is a unified, secure, enterprise-grade platform for building, running and scaling web applications.
 
-This repository provides experimental integration between your Upsun project and [DDEV](https://ddev.com). It tries to  configure your DDEV project to match your Upsun platform configuration by parsing your `.upsun/config.yaml` configuration file and generating equivalent DDEV settings for local development.
+This repository provides experimental integration between your Upsun (Flex or Fixed/Platform.sh) project and [DDEV](https://ddev.com). It tries to  configure your DDEV project to match your Upsun platform configuration by parsing your `.upsun/config.yaml` (or `.platform.app.yaml`) configuration file and generating equivalent DDEV settings for local development.
 
 **🚨 This add-on is experimental and under active development. Please report issues and provide feedback!**
 
-## Using with an Upsun project
+## Using with an Upsun (Flex or Fixed) project
 
 ### Dependencies
 
 * Make sure you have DDEV v1.24.8+ installed.
-* Your project should have a valid `.upsun/config.yaml` file.
+* Your project should have a valid `.upsun/config.yaml` or `.platform.app.yaml` file.
 
 ### Install
 1. Clone your project repository
@@ -35,11 +35,11 @@ To upgrade your version of ddev-upsun, repeat the `ddev add-on get ddev/ddev-ups
 
 ### Run it again if you change your Upsun configuration
 
-If you change your `.upsun/config.yaml`, repeat the `ddev add-on get ddev/ddev-upsun` so that the generated DDEV configuration will be updated.
+If you change your `.upsun/config.yaml` (or .platform.app.yaml/.platform), repeat the `ddev add-on get ddev/ddev-upsun` so that the generated DDEV configuration will be updated.
 
 ## What does it do right now?
 
-* Works with Upsun php-based projects, for example `php:8.1`, `php:8.2`, `php:8.3`, or `php:8.4`. It does not work with non-PHP projects.
+* Works with Upsun php-based projects, for example `php:8.1`, `php:8.2`, `php:8.3`, or `php:8.4`. It has not been tested with non-PHP projects.
 * Takes your checked-out Upsun project and configures DDEV based on that information:
     * PHP version mapping to DDEV equivalents
     * Database services (MySQL, MariaDB, PostgreSQL)
@@ -60,12 +60,12 @@ If you change your `.upsun/config.yaml`, repeat the `ddev add-on get ddev/ddev-u
 
 These project types are included in the automated tests that run with every change:
 
-* **Drupal 11** - Fully tested with all three database types:
+* **Drupal 11** - Extensive automated testing with three database types:
   * [drupal11-mariadb](tests/testdata/drupal11-mariadb/)
   * [drupal11-mysql](tests/testdata/drupal11-mysql/)
   * [drupal11-postgres](tests/testdata/drupal11-postgres/)
 
-Each test configuration includes coverage for Redis, OpenSearch, and Memcached services.
+Each test configuration includes coverage for **Redis**, **OpenSearch**, and **Memcache** services.
 
 ## What has NOT been tested yet
 
@@ -85,7 +85,7 @@ Each test configuration includes coverage for Redis, OpenSearch, and Memcached s
 
 ## Community feedback requested!
 
-**Your experience is important**: Please let us know about how it went for you in any of the [DDEV support venues](https://ddev.readthedocs.io/en/stable/users/support/), especially [Discord](https://discord.gg/5wjP76mBJD).
+**Your experience is important**: Please let us know about how it went for you here in the [issue queue](https://github.com/ddev/ddev-upsun/issues) or in any of the [DDEV support venues](https://ddev.readthedocs.io/en/stable/users/support/), especially [Discord](https://discord.gg/5wjP76mBJD).
 
 We're particularly interested in:
 
@@ -98,20 +98,22 @@ We're particularly interested in:
 
 * If your local project has a different database type than the upstream (Upsun) database, it will conflict, so please back up your database with `ddev export-db` and `ddev delete` before starting the project with new configuration based on upstream.
 * This add-on is based on lessons learned from [ddev-platformsh](https://github.com/ddev/ddev-platformsh) but adapted for Upsun's configuration format, and using the new DDEV [PHP-based actions](https://docs.ddev.com/en/stable/users/extend/creating-add-ons/#action-types-bash-vs-php) add-on technique. 
+* PRs are welcome! The code here is mostly in PHP and is easier to understand than the ddev-platformsh code.
 
 ## What will it do in the future
 
 - [x] Basic PHP project support with database configuration
 - [x] Drupal 11 testing
-- [ ] Support Upsun-Fixed (Platform.sh-style) configuration, `.platform.app.yaml` files
+- [x] Support Upsun-Fixed (Platform.sh-style) configuration, `.platform.app.yaml` files
+- [ ] Additional Upsun service support (`elasticsearch-enterprise`, etc.)
+- [ ] Service **version specification** support (e.g., `redis:8`) passed to DDEV add-ons
 - [ ] Laravel project support and testing
 - [ ] Symfony project support and testing
 - [ ] WordPress project support and testing
 - [ ] Multi-app project support
 - [ ] Worker and cron job translation
 - [ ] Enhanced service relationship mapping
-- [ ] Let us know what's important to you on [Discord](https://ddev.com/s/discord) and in the issue queue here!
 
-## Credits
+**Let us know what's important to you on [Discord](https://ddev.com/s/discord) and in the issue queue here!**
 
 **Maintained by [@rfay](https://github.com/rfay)**
