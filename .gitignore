@@ -30,3 +30,29 @@ node_modules/
 
 # OS specific
 .DS_Store
+.aider*
+
+# Test fixtures - exclude generated/downloaded content
+# (but keep drupal11-base/vendor/ and drupal11-base/web/ for faster tests)
+tests/testdata/*/web/
+tests/testdata/*/vendor/
+tests/testdata/*/.ddev/
+!tests/testdata/drupal11-base/vendor/
+!tests/testdata/drupal11-base/web/
+
+# But keep custom Drupal settings files
+!tests/testdata/*/web/sites/
+tests/testdata/*/web/sites/*
+!tests/testdata/*/web/sites/default/
+tests/testdata/*/web/sites/default/*
+!tests/testdata/*/web/sites/default/settings.php
+!tests/testdata/*/web/sites/default/settings.upsun.php
+
+# Keep essential config files:
+# - composer.json, composer.lock (dependencies)
+# - .upsun/, .platform* (platform configs)
+# - config/sync/ (Drupal config)
+# - drush/ (scripts)
+# - .environment (env vars)
+# - db.sql.gz (optional: can regenerate)
+# - web/sites/default/settings*.php (custom Drupal settings)

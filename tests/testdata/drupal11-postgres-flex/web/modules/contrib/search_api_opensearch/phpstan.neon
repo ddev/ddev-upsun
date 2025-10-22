@@ -1,8 +1,0 @@
-includes:
-	- phpstan-baseline.neon
-
-parameters:
-	level: 1
-
-	ignoreErrors:
-		- "#^Unsafe usage of new static#"
