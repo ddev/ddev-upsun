@@ -37,6 +37,14 @@ tests/testdata/*/web/
 tests/testdata/*/vendor/
 tests/testdata/*/.ddev/
 
+# But keep custom Drupal settings files
+!tests/testdata/*/web/sites/
+tests/testdata/*/web/sites/*
+!tests/testdata/*/web/sites/default/
+tests/testdata/*/web/sites/default/*
+!tests/testdata/*/web/sites/default/settings.php
+!tests/testdata/*/web/sites/default/settings.upsun.php
+
 # Keep essential config files:
 # - composer.json, composer.lock (dependencies)
 # - .upsun/, .platform* (platform configs)
@@ -44,3 +52,4 @@ tests/testdata/*/.ddev/
 # - drush/ (scripts)
 # - .environment (env vars)
 # - db.sql.gz (optional: can regenerate)
+# - web/sites/default/settings*.php (custom Drupal settings)
