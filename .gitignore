@@ -33,9 +33,12 @@ node_modules/
 .aider*
 
 # Test fixtures - exclude generated/downloaded content
+# (but keep drupal11-base/vendor/ and drupal11-base/web/ for faster tests)
 tests/testdata/*/web/
 tests/testdata/*/vendor/
 tests/testdata/*/.ddev/
+!tests/testdata/drupal11-base/vendor/
+!tests/testdata/drupal11-base/web/
 
 # But keep custom Drupal settings files
 !tests/testdata/*/web/sites/

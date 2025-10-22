@@ -40,8 +40,14 @@ setup() {
   ddev delete -Oy "${PROJNAME}" >/dev/null 2>&1 || true
   cd "${TESTDIR}"
 
-  # Copy appropriate test fixture
-  cp -r "${DIR}/tests/testdata/${testname}/." .
+  # Copy base Drupal installation
+  cp -r "${DIR}/tests/testdata/drupal11-base/." .
+
+  # Extract variant name (mysql-flex, mariadb-fixed, etc.)
+  variant="${testname#drupal11-}"
+
+  # Overlay platform-specific configuration
+  cp -r "${DIR}/tests/testdata/platform-configs/${variant}/." .
 
   # Configure DDEV project with bogus settings to ensure add-on overrides them
   run ddev config --project-name="${PROJNAME}" --project-type=drupal11 --docroot=web --fail-on-hook-fail --php-version=5.6 --database=mariadb:10.1 --web-environment-add=PLATFORM_PROJECT=bogus,PLATFORM_ENVIRONMENT=bogus

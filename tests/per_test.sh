@@ -17,9 +17,9 @@ per_test_setup() {
   run ddev composer install --no-dev --no-interaction
   assert_success
 
-  if [ -f ${PROJECT_SOURCE}/tests/testdata/${testname}/db.sql.gz ]; then
-    echo "# Importing database ${PROJECT_SOURCE}/tests/testdata/${testname}/db.sql.gz" >&3
-    run ddev import-db --file=${PROJECT_SOURCE}/tests/testdata/${testname}/db.sql.gz
+  if [ -f ${PROJECT_SOURCE}/tests/testdata/drupal11-base/db.sql.gz ]; then
+    echo "# Importing database ${PROJECT_SOURCE}/tests/testdata/drupal11-base/db.sql.gz" >&3
+    run ddev import-db --file=${PROJECT_SOURCE}/tests/testdata/drupal11-base/db.sql.gz
     assert_success
   fi
 }
