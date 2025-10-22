@@ -17,9 +17,16 @@ per_test_setup() {
   run ddev composer install --no-dev --no-interaction
   assert_success
 
-  if [ -f ${PROJECT_SOURCE}/tests/testdata/drupal11-base/db.sql.gz ]; then
-    echo "# Importing database ${PROJECT_SOURCE}/tests/testdata/drupal11-base/db.sql.gz" >&3
-    run ddev import-db --file=${PROJECT_SOURCE}/tests/testdata/drupal11-base/db.sql.gz
+  # Select database dump based on database type
+  if [[ "${EXPECTED_DB_TYPE:-}" == "postgres" ]]; then
+    DB_DUMP="${PROJECT_SOURCE}/tests/testdata/drupal11-base/db-postgres.sql.gz"
+  else
+    DB_DUMP="${PROJECT_SOURCE}/tests/testdata/drupal11-base/db-mysql.sql.gz"
+  fi
+
+  if [ -f "${DB_DUMP}" ]; then
+    echo "# Importing database ${DB_DUMP}" >&3
+    run ddev import-db --file="${DB_DUMP}"
     assert_success
   fi
 }
