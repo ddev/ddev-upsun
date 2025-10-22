@@ -12,6 +12,11 @@ per_test_setup() {
   run ddev start -y
   assert_success
 
+  # Install composer dependencies (web/ and vendor/ are gitignored)
+  echo "# Running composer install to create vendor/ and web/ directories" >&3
+  run ddev composer install --no-dev --no-interaction
+  assert_success
+
   if [ -f ${PROJECT_SOURCE}/tests/testdata/${testname}/db.sql.gz ]; then
     echo "# Importing database ${PROJECT_SOURCE}/tests/testdata/${testname}/db.sql.gz" >&3
     run ddev import-db --file=${PROJECT_SOURCE}/tests/testdata/${testname}/db.sql.gz
