@@ -30,3 +30,17 @@ node_modules/
 
 # OS specific
 .DS_Store
+.aider*
+
+# Test fixtures - exclude generated/downloaded content
+tests/testdata/*/web/
+tests/testdata/*/vendor/
+tests/testdata/*/.ddev/
+
+# Keep essential config files:
+# - composer.json, composer.lock (dependencies)
+# - .upsun/, .platform* (platform configs)
+# - config/sync/ (Drupal config)
+# - drush/ (scripts)
+# - .environment (env vars)
+# - db.sql.gz (optional: can regenerate)
