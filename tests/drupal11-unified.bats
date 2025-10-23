@@ -21,10 +21,11 @@ setup() {
   export DDEV_NO_INSTRUMENTATION=true
 
   # Extract test parameters from BATS test name
-  # Expected format: "test-drupal11-mariadb-flex" or "test-drupal11-postgres-fixed"
-  if [[ "${BATS_TEST_DESCRIPTION}" =~ test-drupal11-([^-]+)-([^-]+) ]]; then
-    export TEST_DATABASE="${BASH_REMATCH[1]}"    # mariadb/mysql/postgres
+  # Expected format: "test-drupal11-mariadb-flex" or "test-drupal11-mariadb-inexact-flex"
+  if [[ "${BATS_TEST_DESCRIPTION}" =~ test-drupal11-(.+)-(flex|fixed)$ ]]; then
+    local db_and_variant="${BASH_REMATCH[1]}"    # mariadb, mariadb-inexact, mysql, postgres
     export TEST_FORMAT="${BASH_REMATCH[2]}"      # flex/fixed
+    export TEST_DATABASE="${db_and_variant}"     # Full database identifier with variant
     export PROJNAME="test-drupal11-${TEST_DATABASE}-${TEST_FORMAT}"
 
     # Map to fixture directory name (now consistently named with format suffix)
@@ -66,30 +67,42 @@ teardown() {
 
 set_test_expectations() {
   # Set expected values based on test variant
-  case "${TEST_DATABASE}-${TEST_FORMAT}" in
-    "mariadb-flex"|"mariadb-fixed")
+  # TEST_DATABASE now contains the full identifier (e.g., "mariadb", "mariadb-inexact")
+  case "${TEST_DATABASE}" in
+    "mariadb")
       export EXPECTED_PHP_VERSION="8.3"
       export EXPECTED_DB_TYPE="mariadb"
       export EXPECTED_DB_VERSION="11.8"
       export EXPECTED_DDEV_DB_CONFIG="mariadb:11.8"
+      export EXPECTED_VERSION_WARNING=""
       ;;
-    "mysql-flex"|"mysql-fixed")
+    "mariadb-inexact")
+      export EXPECTED_PHP_VERSION="8.3"
+      export EXPECTED_DB_TYPE="mariadb"
+      export EXPECTED_DB_VERSION="11.4"  # 11.0 maps to 11.4 (inexact)
+      export EXPECTED_DDEV_DB_CONFIG="mariadb:11.4"
+      export EXPECTED_VERSION_WARNING="WARNING: mariadb:11.0 is not directly supported by DDEV"
+      ;;
+    "mysql")
       export EXPECTED_PHP_VERSION="8.4"
       export EXPECTED_DB_TYPE="mysql"
       export EXPECTED_DB_VERSION="8.0"
       export EXPECTED_DDEV_DB_CONFIG="mysql:8.0"
+      export EXPECTED_VERSION_WARNING=""
       ;;
-    "postgres-flex"|"postgres-fixed")
+    "postgres")
       export EXPECTED_PHP_VERSION="8.3"
       export EXPECTED_DB_TYPE="postgres"
       export EXPECTED_DB_VERSION="17"
       export EXPECTED_DDEV_DB_CONFIG="postgres:17"
+      export EXPECTED_VERSION_WARNING=""
       ;;
     *)
       export EXPECTED_PHP_VERSION="8.3"
       export EXPECTED_DB_TYPE="mariadb"
       export EXPECTED_DB_VERSION="11.8"
       export EXPECTED_DDEV_DB_CONFIG="mariadb:11.8"
+      export EXPECTED_VERSION_WARNING=""
       ;;
   esac
 
@@ -110,6 +123,12 @@ run_unified_test() {
 
   # Test project is running properly
   echo "# Testing ${TEST_FORMAT} format configuration" >&3
+
+  # Check for version warning during add-on installation if expected
+  if [[ -n "${EXPECTED_VERSION_WARNING}" ]]; then
+    echo "# Checking for version warning: ${EXPECTED_VERSION_WARNING}" >&3
+    [[ -f "${TESTDIR}/.ddev/addon-install.log" ]] && cat "${TESTDIR}/.ddev/addon-install.log" | grep -q "${EXPECTED_VERSION_WARNING}" || (echo "Expected warning not found in addon installation output" && false)
+  fi
 
   # Check that project is running first
   run ddev describe
@@ -188,12 +207,20 @@ run_unified_test() {
   echo "# All tests passed for ${testname}!" >&3
 }
 
-# Test matrix - all 6 combinations
+# Test matrix - all combinations including inexact mapping tests
 @test "test-drupal11-mariadb-flex" {
   run_unified_test
 }
 
 @test "test-drupal11-mariadb-fixed" {
+  run_unified_test
+}
+
+@test "test-drupal11-mariadb-inexact-flex" {
+  run_unified_test
+}
+
+@test "test-drupal11-mariadb-inexact-fixed" {
   run_unified_test
 }
 
