@@ -44,7 +44,9 @@ class PlatformEnvironmentGenerator
             'PLATFORM_DOCUMENT_ROOT' => $this->getDocumentRootPath(),
             'PLATFORM_ENVIRONMENT_TYPE' => 'development',
             'PLATFORM_PROJECT_ENTROPY' => $this->generateEntropy(),
-            'PLATFORM_RELATIONSHIPS' => $this->generateRelationships(),
+            // PLATFORM_RELATIONSHIPS removed - it confuses `upsun` CLI into thinking it's in production
+            // Applications use simpler env vars (MARIADB_HOST, DB_HOST, etc.) set via addDdevServiceVariables()
+            // See: https://github.com/ddev/ddev-upsun/issues/13
             'PLATFORM_ROUTES' => $this->generateRoutes(),
             'PLATFORM_VARIABLES' => $this->generateVariables(),
             'PLATFORM_SMTP_HOST' => 'localhost:1025', // DDEV's mailpit
@@ -117,6 +119,10 @@ class PlatformEnvironmentGenerator
         $service = $dbConfig['service'];
         $serviceInfo = $serviceMap[$service] ?? $serviceMap['mysql']; // Default to mysql
 
+        // Use Git branch name for database path since Upsun database names match environment names
+        // This ensures `ddev pull upsun` works correctly (see https://github.com/ddev/ddev-upsun/issues/13)
+        $databaseName = $this->getCurrentGitBranch();
+
         return [
             'username' => 'db',
             'scheme' => $serviceInfo['scheme'],
@@ -131,7 +137,7 @@ class PlatformEnvironmentGenerator
             'query' => [
                 'is_master' => true
             ],
-            'path' => 'db',
+            'path' => $databaseName,
             'password' => 'db',
             'type' => $service . ':' . $dbConfig['version'],
             'port' => $serviceInfo['port'],
