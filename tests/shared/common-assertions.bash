@@ -63,18 +63,9 @@ assert_database_connectivity() {
   assert_success
   assert_output --partial "db"
 
-  # Test database connectivity via PLATFORM_RELATIONSHIPS
-  local relationship_key
-  case $db_type in
-    mysql) relationship_key="mysql" ;;
-    mariadb) relationship_key="mariadb" ;;
-    postgresql) relationship_key="postgresql" ;;
-    *) echo "Unknown database type: $db_type" >&2; return 1 ;;
-  esac
-
-  run ddev exec "echo \$PLATFORM_RELATIONSHIPS | base64 -d | jq -r \".${relationship_key}[0].host\""
-  assert_success
-  assert_output "db"
+  # PLATFORM_RELATIONSHIPS removed - it confuses `upsun` CLI into thinking it's in production
+  # Applications use simpler env vars (MARIADB_HOST, DB_HOST, etc.) instead
+  # See: https://github.com/ddev/ddev-upsun/issues/13
 
   # Test actual database connectivity
   if [ "$db_type" = "postgresql" ]; then
