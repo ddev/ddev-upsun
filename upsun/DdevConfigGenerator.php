@@ -41,65 +41,100 @@ class DdevConfigGenerator
         'postgresql' => 'postgres'   // Upsun 'postgresql' -> DDEV 'postgres'
     ];
 
-    // Upsun database service -> supported versions (Upsun version -> DDEV version)
+    // Upsun database service -> supported versions mapping
+    // Each entry maps Upsun version => [DDEV version, exact match boolean]
+    // exact=true: Version is identical and fully supported
+    // exact=false: Mapped to next higher DDEV version (will trigger warning)
     private const DATABASE_VERSION_MAP = [
         // Oracle MySQL versions (oracle-mysql service in Upsun -> mysql in DDEV)
+        // DDEV supports MySQL: 5.5–8.0, 8.4
         'oracle-mysql' => [
-            '5.7' => '5.7',
-            '8.0' => '8.0',
-            '8.4' => '8.4'  // DDEV supports MySQL 8.4
+            // Exact matches
+            '5.5' => ['5.5', true],
+            '5.6' => ['5.6', true],
+            '5.7' => ['5.7', true],
+            '8.0' => ['8.0', true],
+            '8.4' => ['8.4', true],
+            // Inexact mappings (map to next higher supported version)
+            '8.1' => ['8.4', false],  // Map 8.1 -> 8.4 (next higher)
+            '8.2' => ['8.4', false],  // Map 8.2 -> 8.4 (next higher)
+            '8.3' => ['8.4', false],  // Map 8.3 -> 8.4 (next higher)
         ],
         // MariaDB versions (mysql/mariadb services in Upsun -> mariadb in DDEV)
-        // Note: mysql service in Upsun refers to MariaDB, not Oracle MySQL
+        // Note: Both 'mysql' and 'mariadb' service types in Upsun refer to MariaDB
+        // DDEV supports MariaDB: 5.5–10.8, 10.11, 11.4, 11.8
         'mysql' => [
-            // Current versions
-            '10.6' => '10.6',
-            '10.11' => '10.11',
-            '11.4' => '11.4',
-            '11.8' => '11.8',
-            // Deprecated versions (for legacy Platform.sh compatibility)
-            // DDEV supports MariaDB 5.5-10.8, 10.11, 11.4, 11.8
-            '5.5' => '5.5',
-            '10.0' => '10.0',   // Use exact versions where DDEV supports them
-            '10.1' => '10.1',
-            '10.2' => '10.2',
-            '10.3' => '10.3',
-            '10.4' => '10.4',
-            '10.5' => '10.5',
+            // Exact matches - Continuous range
+            '5.5' => ['5.5', true],
+            '10.0' => ['10.0', true],
+            '10.1' => ['10.1', true],
+            '10.2' => ['10.2', true],
+            '10.3' => ['10.3', true],
+            '10.4' => ['10.4', true],
+            '10.5' => ['10.5', true],
+            '10.6' => ['10.6', true],
+            '10.7' => ['10.7', true],
+            '10.8' => ['10.8', true],
+            '10.11' => ['10.11', true],
+            '11.4' => ['11.4', true],
+            '11.8' => ['11.8', true],
+            // Inexact mappings (map to next higher supported version)
+            // Note: DDEV has gaps - no 10.9, 10.10, 11.0-11.3, 11.5-11.7
+            '10.9' => ['10.11', false],   // Map 10.9 -> 10.11 (next higher)
+            '10.10' => ['10.11', false],  // Map 10.10 -> 10.11 (next higher)
+            '11.0' => ['11.4', false],    // Map 11.0 -> 11.4 (next higher)
+            '11.1' => ['11.4', false],    // Map 11.1 -> 11.4 (next higher)
+            '11.2' => ['11.4', false],    // Map 11.2 -> 11.4 (next higher)
+            '11.3' => ['11.4', false],    // Map 11.3 -> 11.4 (next higher)
+            '11.5' => ['11.8', false],    // Map 11.5 -> 11.8 (next higher)
+            '11.6' => ['11.8', false],    // Map 11.6 -> 11.8 (next higher)
+            '11.7' => ['11.8', false],    // Map 11.7 -> 11.8 (next higher)
         ],
         'mariadb' => [
-            // Current versions
-            '10.6' => '10.6',
-            '10.11' => '10.11',
-            '11.4' => '11.4',
-            '11.8' => '11.8',
-            // Deprecated versions (for legacy Platform.sh compatibility)
-            // DDEV supports MariaDB 5.5-10.8, 10.11, 11.4, 11.8
-            '5.5' => '5.5',
-            '10.0' => '10.0',   // Use exact versions where DDEV supports them
-            '10.1' => '10.1',
-            '10.2' => '10.2',
-            '10.3' => '10.3',
-            '10.4' => '10.4',
-            '10.5' => '10.5',
+            // Exact matches - Continuous range
+            '5.5' => ['5.5', true],
+            '10.0' => ['10.0', true],
+            '10.1' => ['10.1', true],
+            '10.2' => ['10.2', true],
+            '10.3' => ['10.3', true],
+            '10.4' => ['10.4', true],
+            '10.5' => ['10.5', true],
+            '10.6' => ['10.6', true],
+            '10.7' => ['10.7', true],
+            '10.8' => ['10.8', true],
+            '10.11' => ['10.11', true],
+            '11.4' => ['11.4', true],
+            '11.8' => ['11.8', true],
+            // Inexact mappings (map to next higher supported version)
+            // Note: DDEV has gaps - no 10.9, 10.10, 11.0-11.3, 11.5-11.7
+            '10.9' => ['10.11', false],   // Map 10.9 -> 10.11 (next higher)
+            '10.10' => ['10.11', false],  // Map 10.10 -> 10.11 (next higher)
+            '11.0' => ['11.4', false],    // Map 11.0 -> 11.4 (next higher)
+            '11.1' => ['11.4', false],    // Map 11.1 -> 11.4 (next higher)
+            '11.2' => ['11.4', false],    // Map 11.2 -> 11.4 (next higher)
+            '11.3' => ['11.4', false],    // Map 11.3 -> 11.4 (next higher)
+            '11.5' => ['11.8', false],    // Map 11.5 -> 11.8 (next higher)
+            '11.6' => ['11.8', false],    // Map 11.6 -> 11.8 (next higher)
+            '11.7' => ['11.8', false],    // Map 11.7 -> 11.8 (next higher)
         ],
         // PostgreSQL versions (postgresql service in Upsun -> postgres in DDEV)
-        // DDEV supports PostgreSQL 9-17
+        // DDEV supports PostgreSQL: 9-18 (all versions in this range)
         'postgresql' => [
-            // Current versions
-            '12' => '12',
-            '13' => '13',
-            '14' => '14',
-            '15' => '15',
-            '16' => '16',
-            '17' => '17',
-            // Deprecated versions
-            '9.3' => '9',
-            '9.4' => '9',
-            '9.5' => '9',
-            '9.6' => '9',
-            '10' => '10',
-            '11' => '11'
+            // Exact matches - Continuous range
+            '9' => ['9', true],
+            '9.3' => ['9', true],    // 9.x versions map to 9
+            '9.4' => ['9', true],
+            '9.5' => ['9', true],
+            '9.6' => ['9', true],
+            '10' => ['10', true],
+            '11' => ['11', true],
+            '12' => ['12', true],
+            '13' => ['13', true],
+            '14' => ['14', true],
+            '15' => ['15', true],
+            '16' => ['16', true],
+            '17' => ['17', true],
+            '18' => ['18', true],    // Added in DDEV v1.24.9
         ]
     ];
 
@@ -179,7 +214,28 @@ class DdevConfigGenerator
                 ];
 
                 if (isset(self::DATABASE_VERSION_MAP[$service][$version])) {
-                    $config['database']['version'] = self::DATABASE_VERSION_MAP[$service][$version];
+                    $mapping = self::DATABASE_VERSION_MAP[$service][$version];
+                    $ddevVersion = $mapping[0];
+                    $isExact = $mapping[1];
+
+                    $config['database']['version'] = $ddevVersion;
+
+                    // Warn if mapping is not exact
+                    if (!$isExact) {
+                        $ddevType = self::DATABASE_SERVICE_MAP[$service];
+                        echo "⚠️  WARNING: {$service}:{$version} is not directly supported by DDEV\n";
+                        echo "   Using {$ddevType}:{$ddevVersion} instead (next higher supported version)\n";
+                        echo "   This may cause minor compatibility differences\n";
+                        echo "   Consider updating .upsun/config.yaml to use a version supported by both Upsun and DDEV\n";
+                        echo "   See: https://docs.ddev.com/en/latest/users/configuration/config/#database\n\n";
+                    }
+                } else {
+                    // Version not in mapping at all
+                    $ddevType = self::DATABASE_SERVICE_MAP[$service];
+                    echo "❌ ERROR: {$service}:{$version} is not supported\n";
+                    echo "   DDEV will use its default {$ddevType} version\n";
+                    echo "   Update .upsun/config.yaml to use a supported version\n";
+                    echo "   See: https://docs.ddev.com/en/latest/users/configuration/config/#database\n\n";
                 }
             }
         }

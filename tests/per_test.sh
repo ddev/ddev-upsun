@@ -7,6 +7,8 @@ per_test_setup() {
   echo "# doing 'ddev add-on get ${PROJECT_SOURCE:-}' PROJNAME=${PROJNAME:-} in TESTDIR=${TESTDIR:-} ($(pwd))" >&3
   run ddev add-on get ${PROJECT_SOURCE:-}
   assert_success
+  # Save add-on installation output for version warning tests
+  echo "$output" > .ddev/addon-install.log
 
   echo "# ddev start with PROJNAME=${PROJNAME:-} in ${TESTDIR:-} ($(pwd))" >&3
   run ddev start -y
