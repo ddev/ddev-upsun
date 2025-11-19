@@ -57,11 +57,11 @@ foreach ($examples as $example) {
     // Create symlink to .upsun for testing
     $upsunLink = $example . '/.upsun';
     $upsunDir = $example . '/upsun';
-    
+
     if (is_dir($upsunDir) && !is_link($upsunLink)) {
         symlink($upsunDir, $upsunLink);
     }
-    
+
     if (is_dir($upsunLink)) {
         testParser($example);
     } else {

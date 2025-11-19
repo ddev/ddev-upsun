@@ -2,11 +2,11 @@
 
 ## Purpose
 
-This repository serves as an authoritative source of working Upsun configurations for testing the [ddev-upsun add-on](https://github.com/rfay/ddev-upsun). Each branch contains verified, deployable configurations for different project types.
+This repository serves as an authoritative source of working Upsun configurations for testing the [ddev-upsun add-on](https://github.com/ddev/ddev-upsun). Each branch contains verified, deployable configurations for different project types.
 
 ## About Upsun
 
-Upsun is a Platform-as-a-Service (PaaS) that allows you to develop, deploy, and scale applications in the cloud. 
+Upsun is a Platform-as-a-Service (PaaS) that allows you to develop, deploy, and scale applications in the cloud.
 
 - **Documentation**: https://docs.upsun.com/
 - **Getting Started**: https://docs.upsun.com/get-started/
@@ -57,7 +57,7 @@ Upsun provides service connection info via `PLATFORM_RELATIONSHIPS` JSON, but Dr
 
 ```bash
 export DB_HOST="$MARIADB_HOST"
-export DB_PORT="$MARIADB_PORT"  
+export DB_PORT="$MARIADB_PORT"
 export DB_PATH="$MARIADB_PATH"
 export DB_USERNAME="$MARIADB_USERNAME"
 export DB_PASSWORD="$MARIADB_PASSWORD"
@@ -83,7 +83,7 @@ web:
         '^/sites/[^/]+/settings.*?\.php$':
           scripts: false
     "/sites/default/files":
-      root: "web/sites/default/files"  
+      root: "web/sites/default/files"
       allow: true
       expires: 5m
       passthru: "/index.php"  # CRITICAL for on-demand image style generation
@@ -102,7 +102,7 @@ The `passthru: "/index.php"` in `/sites/default/files` is **essential** - withou
 ```yaml
 mounts:
   "/web/sites/default/files": "shared:files/files"
-  "/tmp": "shared:files/tmp" 
+  "/tmp": "shared:files/tmp"
   "/private": "shared:files/private"
   "/.drush": "shared:files/drush"        # Required for drush.yml generation
   "/drush-backups": "shared:files/drush-backups"
@@ -111,7 +111,7 @@ mounts:
 ### Essential Debugging Commands
 - `upsun activity:log` - View deployment logs
 - `upsun ssh -e <env> 'env | grep DB_'` - Check database variables
-- `upsun ssh -e <env> 'env | grep MARIADB_'` - Check service variables  
+- `upsun ssh -e <env> 'env | grep MARIADB_'` - Check service variables
 - `upsun ssh -e <env> 'echo $PLATFORM_RELATIONSHIPS | base64 -d | jq'` - View raw relationships
 - `upsun ssh -e <env> 'cd web && drush st'` - Check Drupal status
 - `upsun ssh -e <env> 'cd web && drush sql-cli'` - Test database connection
@@ -119,39 +119,47 @@ mounts:
 ### Common Issues and Solutions
 
 #### Image Styles Return 404
-**Problem**: Missing `passthru: "/index.php"` in `/sites/default/files` location  
+
+**Problem**: Missing `passthru: "/index.php"` in `/sites/default/files` location
 **Solution**: Add passthru rule to allow Drupal to generate styles on-demand
 
-#### Missing DB Environment Variables  
-**Problem**: Wrong relationship name in config  
+#### Missing DB Environment Variables
+
+**Problem**: Wrong relationship name in config
 **Solution**: Relationship name must match what `.environment` file expects (e.g., `mariadb` → `MARIADB_*`)
 
 #### Config-reader Class Not Found
-**Problem**: Missing autoloader in drush scripts  
+
+**Problem**: Missing autoloader in drush scripts
 **Solution**: Add `require_once(__DIR__ . '/../vendor/autoload.php');` to PHP scripts
 
 #### Drush Commands Not Found During Deploy
-**Problem**: Drush not in PATH or wrong path reference  
+
+**Problem**: Drush not in PATH or wrong path reference
 **Solution**: Use `vendor/bin/drush` or ensure PATH includes composer bin directory
 
 ## Resources
 
 ### Official Documentation
+
 - **Drupal on Upsun**: https://docs.upsun.com/get-started/stacks/drupal.html
-- **Laravel on Upsun**: https://docs.upsun.com/get-started/stacks/laravel.html  
+- **Laravel on Upsun**: https://docs.upsun.com/get-started/stacks/laravel.html
 - **Web Configuration**: https://docs.upsun.com/create-apps/app-reference/single-runtime-image.html
 
 ### Official Examples
+
 - **Upsun Snippets**: https://github.com/upsun/snippets/tree/main/examples
 - **Drupal 11 Example**: https://github.com/upsun/snippets/tree/main/examples/drupal11
 - **Dev Center Posts**: https://devcenter.upsun.com/posts/drupal-and-upsun/
 
 ### Key Insight: Always Use Official Examples
+
 The official examples in `upsun/snippets` are the most reliable source for configuration patterns. The documentation sometimes lags behind, but the examples are tested and working.
 
 ## Upsun Repository Patterns Discovered
 
 ### Official Resource Types
+
 1. **`upsun/snippets`** - Production-ready config examples (Drupal 11, etc.)
 2. **`upsun/[framework]-scaffold`** - Composer plugins for automatic setup (Drupal only so far)
 3. **`upsun/demo-project-[framework]`** - Tutorial/learning projects (Symfony found)
