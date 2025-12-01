@@ -139,7 +139,7 @@ $configFiles = [
     // Upsun style (current)
     $upsunDir . '/config.yaml',
     $upsunDir . '/.platform.app.yaml',
-    
+
     // Platform.sh style (new)
     $projectRoot . '/.platform/services.yaml',
     $projectRoot . '/.platform.app.yaml'
@@ -151,7 +151,7 @@ Since both platforms use identical service definition formats, the same parsing 
 
 ```php
 // Works for both platforms
-if (preg_match_all('/^\s*(\w+):\s*$.*?^\s*type:\s*(\w+):([0-9.]+)/ms', 
+if (preg_match_all('/^\s*(\w+):\s*$.*?^\s*type:\s*(\w+):([0-9.]+)/ms',
                    $remaining, $serviceMatches, PREG_SET_ORDER)) {
     // Process services
 }

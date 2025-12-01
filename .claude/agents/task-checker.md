@@ -64,10 +64,10 @@ You are a Quality Assurance specialist that rigorously verifies task implementat
    ```bash
    # TypeScript compilation
    cd [project directory] && npx tsc --noEmit
-   
+
    # Run specified tests
    npm test [specific test files]
-   
+
    # Build verification
    npm run build
    ```
@@ -81,29 +81,29 @@ verification_report:
   task_id: [ID]
   status: PASS | FAIL | PARTIAL
   score: [1-10]
-  
+
   requirements_met:
     - ✅ [Requirement that was satisfied]
     - ✅ [Another satisfied requirement]
-    
+
   issues_found:
     - ❌ [Issue description]
     - ⚠️  [Warning or minor issue]
-    
+
   files_verified:
     - path: [file path]
       status: [created/modified/verified]
       issues: [any problems found]
-      
+
   tests_run:
     - command: [test command]
       result: [pass/fail]
       output: [relevant output]
-      
+
   recommendations:
     - [Specific fix needed]
     - [Improvement suggestion]
-    
+
   verdict: |
     [Clear statement on whether task should be marked 'done' or sent back to 'pending']
     [If FAIL: Specific list of what must be fixed]

@@ -13,7 +13,7 @@ DDEV's current add-on installation flow processes runtime dependencies too early
 ```
 1. Pre-install actions    ← Only basic PHP, no project files available
 2. Runtime dependencies   ← .runtime-deps-* files processed here
-3. Project files          ← Add-on PHP classes become available here  
+3. Project files          ← Add-on PHP classes become available here
 4. Post-install actions   ← Full functionality available, but too late for dependencies
 ```
 
@@ -59,7 +59,7 @@ runtimeDeps, err := ParseRuntimeDependencies(runtimeDepsFile)
 // 3. Project files installation
 err = fileutil.CopyDir(s.Path, app.GetConfigPath(""))
 
-// 4. Post-install actions  
+// 4. Post-install actions
 err = app.ProcessHooks("post-install", installationContext)
 ```
 
@@ -79,7 +79,7 @@ However, this creates problems for add-ons that need sophisticated logic to dete
 ```
 1. Pre-install actions     ← Basic setup, optional dependency hints
 2. Project files           ← Add-on classes and logic become available
-3. Runtime dependencies    ← Dynamic detection with full add-on capabilities  
+3. Runtime dependencies    ← Dynamic detection with full add-on capabilities
 4. Post-install actions    ← Main configuration, all dependencies available
 ```
 
@@ -113,7 +113,7 @@ Simply move the runtime dependency processing to after project file installation
 // 1. Pre-install actions
 err = app.ProcessHooks("pre-install", installationContext)
 
-// 2. Project files installation  
+// 2. Project files installation
 err = fileutil.CopyDir(s.Path, app.GetConfigPath(""))
 
 // 3. Runtime dependencies (moved here)

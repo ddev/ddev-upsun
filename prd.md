@@ -143,7 +143,7 @@ Each example contains source Upsun configuration (`upsun/.upsun/config.yaml`) an
 - Common PHP frameworks (Drupal, WordPress, Laravel, Symfony)
 - Composer-based dependency management
 
-#### Database Services  
+#### Database Services
 - MariaDB/MySQL: 11.8, 11.4, 10.11, 10.6 - [Current versions](https://docs.upsun.com/add-services/mysql.html)
 - Oracle MySQL: 8.0, 5.7 - [Current versions](https://docs.upsun.com/add-services/mysql.html)
 - PostgreSQL: 17, 16, 15, 14, 13, 12 - [Current versions](https://docs.upsun.com/add-services/postgresql.html)
@@ -164,7 +164,7 @@ Each example contains source Upsun configuration (`upsun/.upsun/config.yaml`) an
 4. User can immediately use `ddev start` with translated configuration
 
 ### Pull Workflow
-1. User runs `ddev pull upsun` 
+1. User runs `ddev pull upsun`
 2. Add-on connects to Upsun environment using CLI within DDEV web container
 3. Database and files are synchronized to local DDEV
 
@@ -214,7 +214,7 @@ The add-on relies on test fixtures containing realistic Upsun configurations, bu
 ```
 Test Scenarios:
 ├── basic-php-mysql/     (PHP 8.3 + MariaDB 10.11)
-├── php-postgresql/      (PHP 8.2 + PostgreSQL 16) 
+├── php-postgresql/      (PHP 8.2 + PostgreSQL 16)
 ├── wordpress-composer/  (WordPress + MySQL 8.0)
 ├── laravel-api/         (Laravel + PostgreSQL 15)
 └── symfony-webapp/      (Symfony + PostgreSQL 16)

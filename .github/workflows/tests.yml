@@ -183,7 +183,7 @@ jobs:
           fi
           echo "Matrix ddev_version '${{ matrix.ddev_version }}' will be replaced with PR binary"
 
-      
+
 
       - name: Run bats tests (manual)
         run: |

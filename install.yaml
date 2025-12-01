@@ -14,22 +14,6 @@ project_files:
 
 post_install_actions:
   - |
-    #ddev-description Write DDEV environment variables for PHP step
-    # TEMPORARY WORKAROUND: Write missing DDEV env vars to file for PHP step
-    # TODO: Remove when DDEV provides these variables to PHP add-on context
-    # Based on https://docs.ddev.com/en/stable/users/extend/custom-commands/#environment-variables-provided
-    echo "# Temporary DDEV environment variables for add-on" > .env.temp
-    echo "DDEV_PRIMARY_URL=${DDEV_PRIMARY_URL:-}" >> .env.temp
-    echo "DDEV_PRIMARY_URL_WITHOUT_PORT=${DDEV_PRIMARY_URL_WITHOUT_PORT:-}" >> .env.temp
-    echo "DDEV_PRIMARY_URL_PORT=${DDEV_PRIMARY_URL_PORT:-}" >> .env.temp
-    echo "DDEV_SCHEME=${DDEV_SCHEME:-}" >> .env.temp
-    echo "DDEV_HOSTNAME=${DDEV_HOSTNAME:-}" >> .env.temp
-    echo "DDEV_HOST_HTTP_PORT=${DDEV_HOST_HTTP_PORT:-}" >> .env.temp
-    echo "DDEV_HOST_HTTPS_PORT=${DDEV_HOST_HTTPS_PORT:-}" >> .env.temp
-    echo "DDEV_ROUTER_HTTP_PORT=${DDEV_ROUTER_HTTP_PORT:-}" >> .env.temp
-    echo "DDEV_ROUTER_HTTPS_PORT=${DDEV_ROUTER_HTTPS_PORT:-}" >> .env.temp
-    echo "ℹ️  Wrote DDEV URL/port environment variables to .env.temp for PHP step"
-  - |
     <?php
     # #ddev-description Detect services and create dynamic dependencies
     require_once('upsun/EnvironmentLoader.php');
@@ -73,13 +57,13 @@ removal_actions:
       '.env.upsun-services',
       'web-entrypoint.d/environment.sh'
     ];
-    
+
     foreach ($files_to_remove as $file) {
       if (file_exists($file)) {
         $content = file_get_contents($file);
-        $isGenerated = strpos($content, '#ddev-generated') !== false || 
+        $isGenerated = strpos($content, '#ddev-generated') !== false ||
                       strpos($content, '# Upsun service versions (auto-generated') !== false;
-        
+
         if ($isGenerated) {
           if (unlink($file)) {
             echo "✅ Removed: $file\n";
@@ -93,7 +77,7 @@ removal_actions:
         echo "ℹ️  Not found: $file\n";
       }
     }
-    
+
     // Clean up empty web-build directory
     if (is_dir('web-build')) {
       $files = array_diff(scandir('web-build'), ['.', '..']);
@@ -105,4 +89,4 @@ removal_actions:
     }
     echo "=== Cleanup completed ===\n";
 
-ddev_version_constraint: '>= v1.24.8'
+ddev_version_constraint: '>= v1.24.10'

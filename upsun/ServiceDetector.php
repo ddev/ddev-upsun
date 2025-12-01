@@ -169,7 +169,7 @@ class ServiceDetector
     {
         $addons = array_unique(array_column($services, 'addon'));
         $deps = implode("\n", $addons) . "\n";
-        
+
         if (file_put_contents('./.runtime-deps-upsun', $deps) === false) {
             echo "❌ Failed to create runtime dependencies file\n";
             return;
