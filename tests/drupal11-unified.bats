@@ -83,6 +83,13 @@ set_test_expectations() {
       export EXPECTED_DDEV_DB_CONFIG="mariadb:11.4"
       export EXPECTED_VERSION_WARNING="WARNING: mariadb:11.0 is not directly supported by DDEV"
       ;;
+    "mariadb-generic")
+      export EXPECTED_PHP_VERSION="8.3"
+      export EXPECTED_DB_TYPE="mariadb"
+      export EXPECTED_DB_VERSION="11.8"
+      export EXPECTED_DDEV_DB_CONFIG="mariadb:11.8"
+      export EXPECTED_VERSION_WARNING=""
+      ;;
     "mysql")
       export EXPECTED_PHP_VERSION="8.4"
       export EXPECTED_DB_TYPE="mysql"
@@ -237,5 +244,9 @@ run_unified_test() {
 }
 
 @test "test-drupal11-postgres-fixed" {
+  run_unified_test
+}
+
+@test "test-drupal11-mariadb-generic-flex" {
   run_unified_test
 }
