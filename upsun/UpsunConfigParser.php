@@ -71,6 +71,37 @@ class UpsunConfigParser implements UpsunConfigParserInterface
         $relationships = $this->appConfig['relationships'] ?? [];
 
         foreach ($relationships as $name => $config) {
+            // Parse string format 'service_name:endpoint' (official Upsun pattern)
+            if (is_string($config)) {
+                $parts = explode(':', $config);
+                if (count($parts) >= 2) {
+                    $serviceName = trim($parts[0]);
+                    $endpoint = trim($parts[1]);
+
+                    // Look up service by actual service name
+                    if ($this->servicesConfig && isset($this->servicesConfig[$serviceName])) {
+                        $serviceConfig = $this->servicesConfig[$serviceName];
+                        $type = $serviceConfig['type'] ?? null;
+
+                        // Check if it's a database service
+                        if ($type && (str_starts_with($type, 'mysql:') ||
+                                     str_starts_with($type, 'mariadb:') ||
+                                     str_starts_with($type, 'oracle-mysql:') ||
+                                     str_starts_with($type, 'postgresql:'))) {
+
+                            $typeParts = explode(':', $type);
+                            return [
+                                'name' => $name,
+                                'service' => $typeParts[0],
+                                'version' => $typeParts[1] ?? 'latest',
+                                'disk' => $serviceConfig['disk'] ?? null,
+                                'endpoint' => $endpoint
+                            ];
+                        }
+                    }
+                }
+            }
+
             // Check if this is a service reference (relationships can be just service names)
             if ($this->servicesConfig && isset($this->servicesConfig[$name])) {
                 $serviceConfig = $this->servicesConfig[$name];
@@ -355,8 +386,8 @@ class UpsunConfigParser implements UpsunConfigParserInterface
             if (is_string($relationshipConfig)) {
                 $parts = explode(':', $relationshipConfig);
                 if (count($parts) >= 2) {
-                    $serviceName = $parts[0]; // e.g., "cache"
-                    $serviceType = $parts[1]; // e.g., "redis"
+                    $serviceName = trim($parts[0]); // e.g., "cache"
+                    $serviceType = trim($parts[1]); // e.g., "redis"
 
                     if ($serviceType === 'redis' && $this->servicesConfig && isset($this->servicesConfig[$serviceName])) {
                         $serviceConfig = $this->servicesConfig[$serviceName];
