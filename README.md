@@ -3,16 +3,13 @@
 [![last commit](https://img.shields.io/github/last-commit/ddev/ddev-upsun)](https://github.com/ddev/ddev-upsun/commits)
 [![release](https://img.shields.io/github/v/release/ddev/ddev-upsun)](https://github.com/ddev/ddev-upsun/releases/latest)
 
-# DDEV Upsun (EXPERIMENTAL)
-
-> **Warning:** This add-on is experimental and under active development.
-## Overview
+# DDEV Upsun
 
 [Upsun](https://upsun.com/) is a unified, secure, enterprise-grade platform for building, running and scaling web applications.
 
-This repository provides experimental integration between your Upsun (Flex or Fixed/Platform.sh) project and [DDEV](https://ddev.com). It tries to  configure your DDEV project to match your Upsun platform configuration by parsing your `.upsun/config.yaml` (or `.platform.app.yaml`) configuration file and generating equivalent DDEV settings for local development.
+This repository provides a new integration between your Upsun (Flex or Fixed/Platform.sh) project and [DDEV](https://ddev.com). It tries to  configure your DDEV project to match your Upsun platform configuration by parsing your `.upsun/config.yaml` (or `.platform.app.yaml`) configuration file and generating equivalent DDEV settings for local development.
 
-**🚨 This add-on is experimental and under active development. Please report issues and provide feedback!**
+**🚨 This add-on is a completely new approach. Please report issues and provide feedback!**
 
 ## Using with an Upsun (Flex or Fixed) project
 
