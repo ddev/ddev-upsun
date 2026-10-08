@@ -15,7 +15,7 @@ on:
     inputs:
       debug_enabled:
         type: boolean
-        description: Debug with tmate
+        description: Enable remote debugging session
         required: false
         default: false
       ddev_pr_comment_id:
@@ -43,6 +43,7 @@ jobs:
       DDEV_PR_ARTIFACT_NAME: ${{ inputs.ddev_pr_artifact_name || vars.DDEV_PR_ARTIFACT_NAME || 'ddev-linux-amd64.zip' }}
     strategy:
       matrix:
+        os: [ubuntu-latest]
         ddev_version: [stable, HEAD]
         bats_test: [
           "test-drupal11-mariadb-flex",
@@ -54,7 +55,7 @@ jobs:
         ]
       fail-fast: false
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Prepare add-on test environment (no internal test run)
