@@ -175,7 +175,9 @@ run_unified_test() {
   echo "# Testing PLATFORM_CACHE_DIR persistence" >&3
   run ddev exec 'test "$PLATFORM_CACHE_DIR" = /mnt/ddev-upsun-cache && touch "$PLATFORM_CACHE_DIR/marker"'
   assert_success
-  run ddev restart
+  # --skip-hooks: the postgres fixture's DB dump doesn't match config/sync, so
+  # its deploy hook's config-import fails once Drupal is installed
+  run ddev restart --skip-hooks
   assert_success
   run ddev exec 'test -f "$PLATFORM_CACHE_DIR/marker"'
   assert_success
