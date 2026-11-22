@@ -265,6 +265,14 @@ $databases = [];
 $settings['config_sync_directory'] = dirname(DRUPAL_ROOT) . '/config/sync';
 
 /**
+ * Database driver modules depend on the environment's database type.
+ *
+ * config/sync is shared by the MySQL/MariaDB and PostgreSQL variants, so
+ * leave the driver modules out of config import and export.
+ */
+$settings['config_exclude_modules'] = ['mysql', 'pgsql'];
+
+/**
  * Settings:
  *
  * $settings contains environment-specific configuration, such as the files
