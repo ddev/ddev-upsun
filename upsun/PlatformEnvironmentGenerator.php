@@ -50,7 +50,8 @@ class PlatformEnvironmentGenerator
             'PLATFORM_ROUTES' => $this->generateRoutes(),
             'PLATFORM_VARIABLES' => $this->generateVariables(),
             'PLATFORM_SMTP_HOST' => 'localhost:1025', // DDEV's mailpit
-            'PLATFORM_CACHE_DIR' => '/mnt/ddev-global-cache/ddev-upsun/' . (getenv('DDEV_PROJECT') ?: 'default'),
+            // Backed by the per-project upsun-cache volume in docker-compose.upsun.yaml
+            'PLATFORM_CACHE_DIR' => '/mnt/ddev-upsun-cache',
             'PLATFORM_TREE_ID' => $this->generateTreeId(),
         ];
     }

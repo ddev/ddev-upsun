@@ -1,6 +1,7 @@
 name: upsun
 
 project_files:
+  - docker-compose.upsun.yaml
   - upsun/install-hook.php
   - upsun/UpsunConfigParserInterface.php
   - upsun/UpsunConfigParser.php
