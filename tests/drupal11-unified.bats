@@ -171,6 +171,17 @@ run_unified_test() {
   assert_output --partial "PLATFORM_PROJECT="
   assert_output --partial "PLATFORM_ENVIRONMENT="
 
+  # Test PLATFORM_CACHE_DIR is writable and survives restart
+  echo "# Testing PLATFORM_CACHE_DIR persistence" >&3
+  run ddev exec 'test "$PLATFORM_CACHE_DIR" = /mnt/ddev-upsun-cache && touch "$PLATFORM_CACHE_DIR/marker"'
+  assert_success
+  # --skip-hooks: the postgres fixture's DB dump doesn't match config/sync, so
+  # its deploy hook's config-import fails once Drupal is installed
+  run ddev restart --skip-hooks
+  assert_success
+  run ddev exec 'test -f "$PLATFORM_CACHE_DIR/marker"'
+  assert_success
+
   # Test database connectivity
   echo "# Testing database connectivity" >&3
   if [[ "${EXPECTED_DB_TYPE}" == "postgres" ]]; then

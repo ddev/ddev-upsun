@@ -1,0 +1,10 @@
+#ddev-generated
+# Per-project volume for PLATFORM_CACHE_DIR, so build hook caches survive
+# `ddev restart`. DDEV v1.25.6+ no longer mounts ddev-global-cache on web.
+services:
+  web:
+    volumes:
+      - upsun-cache:/mnt/ddev-upsun-cache
+
+volumes:
+  upsun-cache:

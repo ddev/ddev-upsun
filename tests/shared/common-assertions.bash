@@ -260,6 +260,9 @@ assert_file_structure() {
   run grep 'ln -sf /var/www/html /app' .ddev/web-build/Dockerfile.upsun
   assert_success
 
+  # PLATFORM_CACHE_DIR is backed by a per-project volume
+  assert [ -f .ddev/docker-compose.upsun.yaml ]
+
   # Verify mount directories were created
   assert [ -d web/sites/default/files ]
   assert [ -d tmp ]
@@ -299,6 +302,7 @@ assert_addon_removal() {
   # Verify generated files were removed
   assert [ ! -f .ddev/config.upsun.yaml ]
   assert [ ! -f .ddev/web-build/Dockerfile.upsun ]
+  assert [ ! -f .ddev/docker-compose.upsun.yaml ]
 
   # Verify project files were removed (they get installed in .ddev/upsun/)
   assert [ ! -f .ddev/upsun/install-hook.php ]
